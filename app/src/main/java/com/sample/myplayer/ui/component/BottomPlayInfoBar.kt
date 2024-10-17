@@ -22,6 +22,7 @@ import androidx.compose.material.ProgressIndicatorDefaults
 import androidx.compose.material3.Slider
 import androidx.compose.material.SliderDefaults
 import androidx.compose.material.Text
+import androidx.compose.material.ripple
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -186,7 +187,7 @@ fun BottomPlayInfoItem(
                     .size(48.dp)
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
-                        indication = rememberRipple(
+                        indication = ripple(
                             bounded = false,
                             radius = 24.dp
                         )
