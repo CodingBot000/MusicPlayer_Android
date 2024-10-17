@@ -140,11 +140,12 @@ fun HomeScreen(
                             .clip(RoundedCornerShape(15))
                     ) {
                         BottomPlayInfoBar(
-                            modifier = Modifier
-                                .height(64.dp),
+                            modifier = Modifier,
                             onEvent = onEvent,
                             music = music,
                             playerState = playerState,
+                            currentTime = sharedViewModel.musicControllerUiState.currentPosition,
+                            totalTime = sharedViewModel.musicControllerUiState.totalDuration,
                             onBarClick = {
                                 scope.launch {
                                     sheetState.expand()

@@ -94,18 +94,8 @@ fun PlayDetailScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(backgroundColor)
-//            .swipeable(
-//                state = swipeableState,
-//                anchors = anchors,
-//                thresholds = { _, _ -> FractionalThreshold(0.34f) },
-//                orientation = Orientation.Vertical
-//            )
     ) {
-//        if (swipeableState.currentValue >= 1) {
-//            LaunchedEffect(key1 = Unit) {
-//                onNavigateUp()
-//            }
-//        }
+
         PlayDetailScreenContent(
             music = musicControllerUiState.currentMusic,
             dominantColor = dominantColor,

@@ -18,11 +18,16 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ProgressIndicatorDefaults
+import androidx.compose.material3.Slider
+import androidx.compose.material.SliderDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -49,6 +54,8 @@ fun BottomPlayInfoBar(
     onEvent: (HomeEvent) -> Unit,
     playerState: PlayerState?,
     music: Music?,
+    currentTime: Long,
+    totalTime: Long,
     onBarClick: () -> Unit
 ) {
 
@@ -62,7 +69,6 @@ fun BottomPlayInfoBar(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(64.dp)
                     .pointerInput(Unit) {
                         detectDragGestures(
                             onDragEnd = {
@@ -94,7 +100,10 @@ fun BottomPlayInfoBar(
                     music = music,
                     onEvent = onEvent,
                     playerState = playerState,
-                    onBarClick = onBarClick
+                    currentTime = currentTime,
+                    totalTime = totalTime,
+                    onBarClick = onBarClick,
+
                 )
             }
         }
@@ -102,16 +111,22 @@ fun BottomPlayInfoBar(
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomPlayInfoItem(
     music: Music?,
     onEvent: (HomeEvent) -> Unit,
     playerState: PlayerState?,
+    currentTime: Long,
+    totalTime: Long,
+
     onBarClick: () -> Unit
 ) {
-    Box(
+
+
+    Column(
         modifier = Modifier
-            .height(64.dp)
+            .height(78.dp)
             .clickable(onClick = { onBarClick() })
 
     ) {
@@ -187,6 +202,21 @@ fun BottomPlayInfoItem(
             )
 
         }
+
+        Slider(
+            value = currentTime.toFloat(),
+            onValueChange = {
+
+            },
+            thumb = {},
+            valueRange = 0f..totalTime.toFloat(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(1.dp), colors = androidx.compose.material3.SliderDefaults.colors(
+                activeTrackColor = androidx.compose.material3.MaterialTheme.colorScheme.onSurface,
+                inactiveTrackColor = androidx.compose.material3.MaterialTheme.colorScheme.surface
+            )
+        )
     }
 }
 
