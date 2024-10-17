@@ -62,6 +62,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.google.accompanist.pager.rememberPagerState
 import com.sample.myplayer.domain.model.Music
 import com.sample.myplayer.state.PlayerState
@@ -69,6 +70,7 @@ import com.sample.myplayer.ui.Screens
 import com.sample.myplayer.ui.component.BottomPlayInfoBar
 import com.sample.myplayer.ui.component.CustomAlertDialog
 import com.sample.myplayer.ui.component.MusicItem
+import com.sample.myplayer.ui.component.SliderBanner
 import com.sample.myplayer.ui.playdetail.PlayDetailScreen
 import com.sample.myplayer.ui.theme.Gray_10
 import com.sample.myplayer.ui.theme.Gray_20
@@ -84,13 +86,14 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeScreen(
+    navController: NavController,
     sharedViewModel: SharedViewModel,
     onEvent: (HomeEvent) -> Unit,
     uiState: HomeUiState,
     playerState: PlayerState?,
     music: Music?,
     playDetailViewModel: PlayDetailViewModel = hiltViewModel(),
-    onClickPlayInfoBar: () -> Unit
+
 ) {
     val isInitialized = rememberSaveable { mutableStateOf(false) }
 
@@ -132,6 +135,14 @@ fun HomeScreen(
             val bgColor = if (isSystemInDarkTheme()) Gray_20 else Gray_10
 
             Scaffold(
+                topBar = { },
+                content = { padding ->
+                    HomeContent(
+                        navController = navController,
+                        onEvent = onEvent,
+                        uiState = uiState
+                    )
+                },
                 bottomBar = {
                     BottomAppBar(
                         backgroundColor = bgColor,
@@ -159,13 +170,6 @@ fun HomeScreen(
                     .navigationBarsPadding()
                     .imePadding()
                     .statusBarsPadding(),
-                topBar = { },
-                content = { padding ->
-                    HomeContent(
-                        onEvent = onEvent,
-                        uiState = uiState
-                    )
-                },
                 backgroundColor = MaterialTheme.colors.background,
             )
         },
@@ -174,7 +178,8 @@ fun HomeScreen(
 }
 
 @Composable
-fun HomeContent(
+private fun HomeContent(
+    navController: NavController,
     onEvent: (HomeEvent) -> Unit,
     uiState: HomeUiState,
 ) {
@@ -216,6 +221,15 @@ fun HomeContent(
                                 .align(Alignment.TopCenter),
                             contentPadding = PaddingValues(bottom = 60.dp)
                         ) {
+                            item {
+                                if (uiState.bannerList != null) {
+                                    SliderBanner(banners = uiState.bannerList) {
+                                        onEvent(HomeEvent.OnMusicSelected(it))
+                                        onEvent(HomeEvent.PlayMusic)
+                                        navController.navigate(Screens.PLAY_DETAIL_SCREEN)
+                                    }
+                                }
+                            }
                             items(uiState.musicList) {
                                 MusicItem(
                                     onClick = {

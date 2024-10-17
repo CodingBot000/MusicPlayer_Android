@@ -67,14 +67,12 @@ class MainActivity : ComponentActivity() {
 
                         Box(modifier = Modifier.fillMaxSize()) {
                             HomeScreen(
+                                navController = navController,
                                 sharedViewModel = sharedViewModel,
                                 onEvent = mainViewModel::onEvent,
                                 uiState = mainViewModel.homeUiState,
                                 music = musicControllerUiState.currentMusic,
                                 playerState = musicControllerUiState.playerState,
-                                onClickPlayInfoBar = {
-
-                                }
 
                             )
                         }

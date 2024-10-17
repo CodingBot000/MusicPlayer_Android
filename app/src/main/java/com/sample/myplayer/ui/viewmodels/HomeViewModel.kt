@@ -22,6 +22,7 @@ import javax.inject.Inject
 data class HomeUiState(
     val loading: Boolean? = false,
     val musicList: List<Music>? = emptyList(),
+    val bannerList: List<Music>? = emptyList(),
     val selectedMusic: Music? = null,
     val errorMessage: String? = null,
     val showDialog: Boolean? = false,
@@ -86,8 +87,10 @@ class HomeViewModel @Inject constructor(
                             homeUiState.copy(
                                 loading = false,
                                 musicList = newList,
+                                bannerList = newList.subList(0, 5),
                                 errorMessage = null
                             )
+
                         } ?: run {
                             homeUiState.copy(
                                 loading = false,

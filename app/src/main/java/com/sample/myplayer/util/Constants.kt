@@ -9,5 +9,5 @@ object Constants {
     const val HTTP_READ_TIMEOUT = 10L
 
     const val ONLINE = false
-
+    var globalMultipleInputTime = 0L
 }
