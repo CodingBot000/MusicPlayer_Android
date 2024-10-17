@@ -66,7 +66,7 @@ class HomeViewModel @Inject constructor(
         homeUiState = homeUiState.copy(loading = true)
 
         viewModelScope.launch {
-            if (Constants.ONLINE || !isAssetDataRead) {
+            if (Constants.ONLINE && !isAssetDataRead) {
                 musicRepository.getMusicList()
             } else {
                 musicRepository.getMusicListFromAsset()
