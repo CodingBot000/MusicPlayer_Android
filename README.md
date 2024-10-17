@@ -13,6 +13,12 @@
 - Jetpack
 - MVVMArchitecture
 
+## Online, offline
+- When `Constants.ONLINE` is set to `false`, changing it to `true` will fetch files from the server.
+- If it cannot be used due to server restrictions, an `AlertDialog` is displayed, and local data from the assets is read and used.
+- Currently, the default is set to read and use local data from the assets.
+
+
 ## Features
 
 <ul>
