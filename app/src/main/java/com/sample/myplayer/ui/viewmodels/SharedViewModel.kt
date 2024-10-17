@@ -12,7 +12,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.time.Duration.Companion.seconds
 
 
 data class MusicControllerUiState(
@@ -51,7 +50,7 @@ class SharedViewModel @Inject constructor(
             if (playerState == PlayerState.PLAYING) {
                 viewModelScope.launch {
                     while (true) {
-                        delay(3.seconds)
+                        delay(3000L)
                         musicControllerUiState = musicControllerUiState.copy(
                             currentPosition = musicController.getCurrentPosition()
                         )

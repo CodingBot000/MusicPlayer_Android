@@ -4,12 +4,15 @@ package com.sample.myplayer.ui.viewmodels
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.constraintlayout.compose.ConstraintSet
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sample.myplayer.domain.model.Music
 import com.sample.myplayer.domain.repository.MusicRepository
 import com.sample.myplayer.domain.service.MusicController
 import com.sample.myplayer.state.Resource
+import com.sample.myplayer.util.Constants
+import com.sample.myplayer.util.multipleMusicList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
@@ -20,7 +23,8 @@ data class HomeUiState(
     val loading: Boolean? = false,
     val musicList: List<Music>? = emptyList(),
     val selectedMusic: Music? = null,
-    val errorMessage: String? = null
+    val errorMessage: String? = null,
+    val showDialog: Boolean? = false,
 )
 
 sealed class HomeEvent {
@@ -31,6 +35,8 @@ sealed class HomeEvent {
     data object SkipToNextMusic : HomeEvent()
     data object SkipToPreviousMusic : HomeEvent()
     data class OnMusicSelected(val selectedMusic: Music) : HomeEvent()
+    data object CloseAlert : HomeEvent()
+    data object FetchAssetData : HomeEvent()
 }
 
 @HiltViewModel
@@ -44,27 +50,27 @@ class HomeViewModel @Inject constructor(
     fun onEvent(event: HomeEvent) {
         when (event) {
             HomeEvent.PlayMusic -> playMusic()
-
             HomeEvent.PauseMusic -> pauseMusic()
-
             HomeEvent.ResumeMusic -> resumeMusic()
-
             HomeEvent.FetchMusic -> fetchMusicList()
-
+            HomeEvent.FetchAssetData -> fetchMusicList(isAssetDataRead = true)
             is HomeEvent.OnMusicSelected -> homeUiState =
                 homeUiState.copy(selectedMusic = event.selectedMusic)
-
             is HomeEvent.SkipToNextMusic -> skipToNextMusic()
-
             is HomeEvent.SkipToPreviousMusic -> skipToPreviousMus()
+            HomeEvent.CloseAlert -> homeUiState = homeUiState.copy(showDialog = false)
         }
     }
 
-    private fun fetchMusicList() {
+    private fun fetchMusicList(isAssetDataRead: Boolean = false) {
         homeUiState = homeUiState.copy(loading = true)
 
         viewModelScope.launch {
-            musicRepository.getMusicList().catch {
+            if (Constants.ONLINE || !isAssetDataRead) {
+                musicRepository.getMusicList()
+            } else {
+                musicRepository.getMusicListFromAsset()
+            }.catch {
                 homeUiState = homeUiState.copy(
                     loading = false,
                     errorMessage = it.message
@@ -72,14 +78,22 @@ class HomeViewModel @Inject constructor(
             }.collect {
                 homeUiState = when (it) {
                     is Resource.Success -> {
-                        it.data?.let { list ->
-                            musicController.addMediaItems(list)
-                        }
 
-                        homeUiState.copy(
-                            loading = false,
-                            musicList = it.data
-                        )
+                        it.data?.let { list ->
+                            val newList = multipleMusicList(list)
+                            musicController.addMediaItems(newList)
+
+                            homeUiState.copy(
+                                loading = false,
+                                musicList = newList,
+                                errorMessage = null
+                            )
+                        } ?: run {
+                            homeUiState.copy(
+                                loading = false,
+                                errorMessage = "Fail fetch data"
+                            )
+                        }
                     }
 
                     is Resource.Loading -> {
@@ -92,7 +106,8 @@ class HomeViewModel @Inject constructor(
                     is Resource.Error -> {
                         homeUiState.copy(
                             loading = false,
-                            errorMessage = it.message
+                            errorMessage = it.message,
+                            showDialog = true
                         )
                     }
                 }

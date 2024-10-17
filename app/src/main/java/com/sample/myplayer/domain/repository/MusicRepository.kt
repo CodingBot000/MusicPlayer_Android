@@ -6,4 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface MusicRepository {
     suspend fun getMusicList(): Flow<Resource<List<Music>>>
+    suspend fun getMusicListFromAsset(): Flow<Resource<List<Music>>>
 }

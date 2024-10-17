@@ -9,11 +9,9 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -22,14 +20,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.sample.myplayer.data.service.MusicService
-import com.sample.myplayer.ui.SplashScreen
-import com.sample.myplayer.ui.viewmodels.HomeEvent
-import com.sample.myplayer.ui.home.HomeScreen
-import com.sample.myplayer.ui.viewmodels.HomeViewModel
-import com.sample.myplayer.ui.component.HomeBottomBar
 import com.sample.myplayer.ui.Screens
+import com.sample.myplayer.ui.SplashScreen
+import com.sample.myplayer.ui.home.HomeScreen
 import com.sample.myplayer.ui.playdetail.PlayDetailScreen
 import com.sample.myplayer.ui.theme.MusicPlayerTheme
+import com.sample.myplayer.ui.viewmodels.HomeViewModel
 import com.sample.myplayer.ui.viewmodels.PlayDetailViewModel
 import com.sample.myplayer.ui.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -71,16 +67,15 @@ class MainActivity : ComponentActivity() {
 
                         Box(modifier = Modifier.fillMaxSize()) {
                             HomeScreen(
+                                sharedViewModel = sharedViewModel,
                                 onEvent = mainViewModel::onEvent,
                                 uiState = mainViewModel.homeUiState,
-                            )
-                            HomeBottomBar(
-                                modifier = Modifier
-                                    .align(Alignment.BottomCenter),
-                                onEvent = mainViewModel::onEvent,
                                 music = musicControllerUiState.currentMusic,
                                 playerState = musicControllerUiState.playerState,
-                                onBarClick = { navController.navigate(Screens.PLAY_DETAIL_SCREEN) }
+                                onClickPlayInfoBar = {
+
+                                }
+
                             )
                         }
                     }

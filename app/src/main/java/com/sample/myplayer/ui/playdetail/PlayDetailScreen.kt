@@ -77,7 +77,7 @@ fun PlayDetailScreen(
         return
     }
 
-    val swipeableState = rememberSwipeableState(initialValue = 0)
+//    val swipeableState = rememberSwipeableState(initialValue = 0)
     val endAnchor = LocalConfiguration.current.screenHeightDp * LocalDensity.current.density
     val anchors = mapOf(
         0f to 0, endAnchor to 1
@@ -94,18 +94,18 @@ fun PlayDetailScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(backgroundColor)
-            .swipeable(
-                state = swipeableState,
-                anchors = anchors,
-                thresholds = { _, _ -> FractionalThreshold(0.34f) },
-                orientation = Orientation.Vertical
-            )
+//            .swipeable(
+//                state = swipeableState,
+//                anchors = anchors,
+//                thresholds = { _, _ -> FractionalThreshold(0.34f) },
+//                orientation = Orientation.Vertical
+//            )
     ) {
-        if (swipeableState.currentValue >= 1) {
-            LaunchedEffect(key1 = Unit) {
-                onNavigateUp()
-            }
-        }
+//        if (swipeableState.currentValue >= 1) {
+//            LaunchedEffect(key1 = Unit) {
+//                onNavigateUp()
+//            }
+//        }
         PlayDetailScreenContent(
             music = musicControllerUiState.currentMusic,
             dominantColor = dominantColor,

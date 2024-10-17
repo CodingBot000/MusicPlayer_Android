@@ -45,13 +45,12 @@ class MusicControllerImpl(context: Context) : MusicController {
 
 
     private fun controllerListener() {
-        println("qq controllerListener  mediaController: $mediaController")
+
         mediaController?.addListener(object : Player.Listener {
             override fun onEvents(player: Player, events: Player.Events) {
                 super.onEvents(player, events)
 
                 with(player) {
-                    println("qq controllerListener  mediaControllerCallback: $mediaControllerCallback")
                     mediaControllerCallback?.invoke(
                         playbackState.toPlayerState(isPlaying),
                         convertMediaItemToMusic(currentMediaItem!!),

@@ -8,4 +8,6 @@ object Constants {
     const val HTTP_WRITE_TIMEOUT = 1L
     const val HTTP_READ_TIMEOUT = 10L
 
+    const val ONLINE = false
+
 }

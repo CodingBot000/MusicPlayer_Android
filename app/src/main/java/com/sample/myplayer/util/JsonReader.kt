@@ -25,6 +25,10 @@ class JsonReaderApiImpl @Inject constructor(
         val response = okHttpClient.newCall(request).execute()
 
         if (response.isSuccessful) {
+            val finalUrl = response.request.url.toString()
+            if (finalUrl.contains("503.html")) {
+                throw ServerError(response.code.toString(), "over server limit $finalUrl")
+            }
             return@withContext response.body?.string()!!
         }
 

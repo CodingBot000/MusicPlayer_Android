@@ -16,11 +16,22 @@ class MusicDataSourceImpl @Inject constructor(
 {
     override suspend fun getMusicList() =
         flow {
-            val jsonString = jsonReaderApi.jsonUrlReader(
-                Constants.MUSIC_LIST_API
-            )
-            val musicList = GsonObject.gson.fromJson(jsonString, MusicJsonDatas::class.java).datas
-            if (musicList.isNotEmpty())
-                emit(Resource.Success(musicList))
+            try {
+                val jsonString = jsonReaderApi.jsonUrlReader(
+                    Constants.MUSIC_LIST_API
+                )
+                val musicList =
+                    GsonObject.gson.fromJson(jsonString, MusicJsonDatas::class.java).datas
+                if (musicList.isEmpty()) {
+                    emit(Resource.Error(message = "parsing result List is Empty"))
+                    return@flow
+                }
+
+                if (musicList.isNotEmpty())
+                    emit(Resource.Success(musicList))
+            } catch (e: Exception) {
+                emit(Resource.Error(message = e.message.toString()))
+            }
         }
+
 }

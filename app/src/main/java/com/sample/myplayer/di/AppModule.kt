@@ -1,9 +1,12 @@
 package com.sample.myplayer.di
 
 import android.content.Context
+import com.google.gson.Gson
+import com.sample.myplayer.data.datasource.AssetMusicDataSourceImpl
 import com.sample.myplayer.data.datasource.MusicDataSourceImpl
 import com.sample.myplayer.data.repository.MusicRepositoryImpl
 import com.sample.myplayer.data.service.MusicControllerImpl
+import com.sample.myplayer.domain.datasource.AssetMusicDataSource
 import com.sample.myplayer.domain.datasource.MusicDataSource
 import com.sample.myplayer.domain.repository.MusicRepository
 import com.sample.myplayer.domain.service.MusicController
@@ -18,15 +21,13 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-
-
-
     @Singleton
     @Provides
     fun provideMusicRepository(
         musicDataSource: MusicDataSource,
+        assetMusicDataSource: AssetMusicDataSource
     ): MusicRepository =
-        MusicRepositoryImpl(musicDataSource)
+        MusicRepositoryImpl(musicDataSource, assetMusicDataSource)
 
     @Singleton
     @Provides
@@ -35,6 +36,16 @@ object AppModule {
     ): MusicDataSource =
         MusicDataSourceImpl(jsonReaderApi)
 
+    @Provides
+    @Singleton
+    fun provideAssetMusicDataSource(
+        @ApplicationContext context: Context,
+        gson: Gson
+    ): AssetMusicDataSource = AssetMusicDataSourceImpl(context, gson)
+
+    @Provides
+    @Singleton
+    fun provideGson(): Gson = Gson()
 
     @Singleton
     @Provides

@@ -29,12 +29,11 @@ fun MusicItem(
     val paddingTop = 15.dp
 
     Row( modifier = Modifier
+        .fillMaxWidth()
         .clickable {
             onClick()
         }
-        .fillMaxWidth()) {
-
-
+    ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(music.albumThumbUrl)

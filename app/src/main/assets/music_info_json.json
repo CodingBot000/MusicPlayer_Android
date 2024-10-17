@@ -1,0 +1,48 @@
+{
+  "musics": [
+    {
+      "id": 1,
+      "title": "Achachak - Andante",
+      "desc": "what a beautiful",
+      "musicUrl": "asset:///Achachak - Andante.mp3",
+      "albumThumbUrl": "https://freemusicarchive.org/image/?file=album_image%2FPJmR4VSaPBn3izFiIzrrVXqlDi6hXFhgJyOPOqTh.jpg&width=290&height=290&type=album"
+    },
+    {
+      "id": 2,
+      "title": "Figaro Jamming",
+      "desc": "what a beautiful",
+      "musicUrl": "asset:///Dee Yan-Key - Figaro Jamming.mp3",
+      "albumThumbUrl": "https://freemusicarchive.org/image/?file=images%2Ftracks%2FTrack_-_2018010484739942&width=290&height=290&type=track"
+    },
+
+        {
+      "id": 3,
+      "title": "Bach Prelude & Fugue 1",
+      "desc": "24 Preludes & Fugues, J. S. Bach",
+      "musicUrl": "asset:///John Lewis Grant - Bach Prelude &  Fugue 1.mp3",
+          "albumThumbUrl": "https://freemusicarchive.org/image/?file=images%2Falbums%2FJohn_Lewis_Grant_-_24_Preludes__Fugues_J_S_Bach_-_20161222181156790.jpg&width=290&height=290&type=album"
+    },
+        {
+      "id": 4,
+      "title": "BWV 610: Jesu, meine Freude by James Kibbie",
+      "desc": "Bach Organ Works: Orgelbüchlein",
+      "musicUrl": "asset:///James Kibbie - BWV 610_ Jesu, meine Freude.mp3",
+      "albumThumbUrl": "https://freemusicarchive.org/image/?file=images%2Falbums%2FJames_Kibbie_-_Bach_Organ_Works_Orgelbchlein_-_20120111154810736.JPG&width=290&height=290&type=album"
+    },
+        {
+      "id": 5,
+      "title": "BWV 595: Concerto in C by James Kibbie",
+      "desc": "Bach Organ Works: Concerti",
+      "musicUrl": "asset:///James Kibbie - BWV 595_ Concerto in C.mp3",
+          "albumThumbUrl": "https://freemusicarchive.org/image/?file=images%2Falbums%2FJames_Kibbie_-_Bach_Organ_Works_Concerti_-_20120111152559093.JPG&width=290&height=290&type=album"
+    },
+        {
+      "id": 6,
+      "title": "Bach, Violin Sonata 2, BWV 1003, Andante, Siloti transcription by Felipe Sarro",
+      "desc": "Bach: Original works and transcriptions",
+      "musicUrl": "asset:///Felipe Sarro - Bach, Violin Sonata 2, BWV 1003, Andante, Siloti transcription.mp3",
+          "albumThumbUrl": "https://freemusicarchive.org/image/?file=images%2Falbums%2FBach_Original_works_and_transcriptions_-_20100610215403526.jpg&width=290&height=290&type=album"
+    }
+  ]
+}
+
