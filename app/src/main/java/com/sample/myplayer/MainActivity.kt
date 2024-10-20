@@ -70,10 +70,10 @@ class MainActivity : ComponentActivity() {
                             HomeScreen(
                                 onEvent = mainViewModel::onEvent,
                                 uiState = mainViewModel.homeUiState,
-                                music = musicControllerUiState.currentMusic,
-                                sharedViewModel = sharedViewModel,
-                                playerState = musicControllerUiState.playerState,
-
+                                musicControllerUiState = musicControllerUiState,
+                                onBackPressed = {
+                                    finish()
+                                }
                             )
                         }
                     }

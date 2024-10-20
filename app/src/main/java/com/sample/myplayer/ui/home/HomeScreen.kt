@@ -1,6 +1,7 @@
 package com.sample.myplayer.ui.home
 
 import android.annotation.SuppressLint
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
@@ -41,11 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.google.accompanist.pager.rememberPagerState
-import com.sample.myplayer.domain.model.Music
-import com.sample.myplayer.state.PlayerState
-import com.sample.myplayer.ui.Screens
 import com.sample.myplayer.ui.component.BottomPlayInfoBar
 import com.sample.myplayer.ui.component.CustomAlertDialog
 import com.sample.myplayer.ui.component.MusicItem
@@ -55,8 +52,8 @@ import com.sample.myplayer.ui.theme.Gray_10
 import com.sample.myplayer.ui.theme.Gray_20
 import com.sample.myplayer.ui.viewmodels.HomeEvent
 import com.sample.myplayer.ui.viewmodels.HomeUiState
+import com.sample.myplayer.ui.viewmodels.MusicControllerUiState
 import com.sample.myplayer.ui.viewmodels.PlayDetailViewModel
-import com.sample.myplayer.ui.viewmodels.SharedViewModel
 import kotlinx.coroutines.launch
 
 
@@ -66,10 +63,9 @@ import kotlinx.coroutines.launch
 fun HomeScreen(
     onEvent: (HomeEvent) -> Unit,
     uiState: HomeUiState,
-    playerState: PlayerState?,
-    music: Music?,
-    sharedViewModel: SharedViewModel,
+    musicControllerUiState: MusicControllerUiState,
     playDetailViewModel: PlayDetailViewModel = hiltViewModel(),
+    onBackPressed: () -> Unit
 
 ) {
     val isInitialized = rememberSaveable { mutableStateOf(false) }
@@ -86,13 +82,23 @@ fun HomeScreen(
     )
     val scope = rememberCoroutineScope()
 
+    BackHandler {
+        if (sheetState.isExpanded) {
+            scope.launch {
+                sheetState.collapse()
+            }
+        } else {
+            onBackPressed()
+        }
+    }
+
     BottomSheetScaffold(
         scaffoldState = rememberBottomSheetScaffoldState(bottomSheetState = sheetState),
         sheetContent = {
 
             PlayDetailScreen(
                 onEvent = playDetailViewModel::onEvent,
-                musicControllerUiState = sharedViewModel.musicControllerUiState,
+                musicControllerUiState = musicControllerUiState,
                 onClose = {
                     scope.launch {
                         sheetState.collapse()
@@ -134,10 +140,10 @@ fun HomeScreen(
                         BottomPlayInfoBar(
                             modifier = Modifier,
                             onEvent = onEvent,
-                            music = music,
-                            playerState = playerState,
-                            currentTime = sharedViewModel.musicControllerUiState.currentPosition,
-                            totalTime = sharedViewModel.musicControllerUiState.totalDuration,
+                            music = musicControllerUiState.currentMusic,
+                            playerState = musicControllerUiState.playerState,
+                            currentTime = musicControllerUiState.currentPosition,
+                            totalTime = musicControllerUiState.totalDuration,
                             onBarClick = {
                                 scope.launch {
                                     sheetState.expand()
