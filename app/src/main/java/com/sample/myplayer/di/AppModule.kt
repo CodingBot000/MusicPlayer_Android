@@ -2,11 +2,11 @@ package com.sample.myplayer.di
 
 import android.content.Context
 import com.google.gson.Gson
-import com.sample.myplayer.data.datasource.AssetMusicDataSourceImpl
+import com.sample.myplayer.data.datasource.MusicLocalDataSourceImpl
 import com.sample.myplayer.data.datasource.MusicDataSourceImpl
 import com.sample.myplayer.data.repository.MusicRepositoryImpl
 import com.sample.myplayer.data.service.MusicControllerImpl
-import com.sample.myplayer.domain.datasource.AssetMusicDataSource
+import com.sample.myplayer.domain.datasource.MusicLocalDataSource
 import com.sample.myplayer.domain.datasource.MusicDataSource
 import com.sample.myplayer.domain.repository.MusicRepository
 import com.sample.myplayer.domain.service.MusicController
@@ -25,9 +25,9 @@ object AppModule {
     @Provides
     fun provideMusicRepository(
         musicDataSource: MusicDataSource,
-        assetMusicDataSource: AssetMusicDataSource
+        musicLocalDataSource: MusicLocalDataSource
     ): MusicRepository =
-        MusicRepositoryImpl(musicDataSource, assetMusicDataSource)
+        MusicRepositoryImpl(musicDataSource, musicLocalDataSource)
 
     @Singleton
     @Provides
@@ -38,10 +38,10 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideAssetMusicDataSource(
+    fun provideMusicLocalDataSource(
         @ApplicationContext context: Context,
         gson: Gson
-    ): AssetMusicDataSource = AssetMusicDataSourceImpl(context, gson)
+    ): MusicLocalDataSource = MusicLocalDataSourceImpl(context, gson)
 
     @Provides
     @Singleton

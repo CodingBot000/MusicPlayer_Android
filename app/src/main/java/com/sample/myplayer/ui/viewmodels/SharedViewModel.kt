@@ -50,7 +50,7 @@ class SharedViewModel @Inject constructor(
             if (playerState == PlayerState.PLAYING) {
                 viewModelScope.launch {
                     while (true) {
-                        delay(3000L)
+                        delay(1000L)
                         musicControllerUiState = musicControllerUiState.copy(
                             currentPosition = musicController.getCurrentPosition()
                         )

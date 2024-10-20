@@ -64,12 +64,11 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeScreen(
-    navController: NavController,
-    sharedViewModel: SharedViewModel,
     onEvent: (HomeEvent) -> Unit,
     uiState: HomeUiState,
     playerState: PlayerState?,
     music: Music?,
+    sharedViewModel: SharedViewModel,
     playDetailViewModel: PlayDetailViewModel = hiltViewModel(),
 
 ) {
@@ -94,7 +93,7 @@ fun HomeScreen(
             PlayDetailScreen(
                 onEvent = playDetailViewModel::onEvent,
                 musicControllerUiState = sharedViewModel.musicControllerUiState,
-                onNavigateUp = {
+                onClose = {
                     scope.launch {
                         sheetState.collapse()
                     }
@@ -116,9 +115,13 @@ fun HomeScreen(
                 topBar = { },
                 content = { padding ->
                     HomeContent(
-                        navController = navController,
                         onEvent = onEvent,
-                        uiState = uiState
+                        uiState = uiState,
+                        onClickBanner = {
+                            scope.launch {
+                                sheetState.expand()
+                            }
+                        }
                     )
                 },
                 bottomBar = {
@@ -157,9 +160,9 @@ fun HomeScreen(
 
 @Composable
 private fun HomeContent(
-    navController: NavController,
     onEvent: (HomeEvent) -> Unit,
     uiState: HomeUiState,
+    onClickBanner: () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         val appBarColor = MaterialTheme.colors.surface.copy(alpha = 0.87f)
@@ -204,7 +207,7 @@ private fun HomeContent(
                                     SliderBanner(banners = uiState.bannerList) {
                                         onEvent(HomeEvent.OnMusicSelected(it))
                                         onEvent(HomeEvent.PlayMusic)
-                                        navController.navigate(Screens.PLAY_DETAIL_SCREEN)
+                                        onClickBanner()
                                     }
                                 }
                             }
@@ -226,10 +229,10 @@ private fun HomeContent(
                 CustomAlertDialog(
                     showDialog = uiState.showDialog ?: false,
                     content = uiState.errorMessage,
-                    confirmButtonName = "Read Asset Data",
+                    confirmButtonName = "Read Local Data",
                     onDismiss = {
                         onEvent(HomeEvent.CloseAlert)
-                        onEvent(HomeEvent.FetchAssetData)
+                        onEvent(HomeEvent.FetchLocalData)
                     })
             }
 

@@ -70,18 +70,12 @@ import com.sample.myplayer.util.convertRunningTime
 fun PlayDetailScreen(
     onEvent: (PlayMusicEvent) -> Unit,
     musicControllerUiState: MusicControllerUiState,
-    onNavigateUp: () -> Unit,
+    onClose: () -> Unit,
 ) {
     if (musicControllerUiState.currentMusic == null) {
         EmptyView()
         return
     }
-
-//    val swipeableState = rememberSwipeableState(initialValue = 0)
-    val endAnchor = LocalConfiguration.current.screenHeightDp * LocalDensity.current.density
-    val anchors = mapOf(
-        0f to 0, endAnchor to 1
-    )
 
     val backgroundColor = MaterialTheme.colors.background
 
@@ -118,7 +112,7 @@ fun PlayDetailScreen(
                     onEvent(PlayMusicEvent.SeekPlayMusicToPosition(if (currentPosition - 10 * 1000 < 0) 0 else currentPosition - 10 * 1000))
                 }
             },
-            onClose = { onNavigateUp() }
+            onClose = { onClose() }
         )
     }
 

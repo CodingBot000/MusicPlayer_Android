@@ -1,5 +1,7 @@
 package com.sample.myplayer
 
+import android.app.ActivityManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -21,10 +23,8 @@ import com.sample.myplayer.data.service.MusicService
 import com.sample.myplayer.ui.Screens
 import com.sample.myplayer.ui.SplashScreen
 import com.sample.myplayer.ui.home.HomeScreen
-import com.sample.myplayer.ui.playdetail.PlayDetailScreen
 import com.sample.myplayer.ui.theme.MusicPlayerTheme
 import com.sample.myplayer.ui.viewmodels.HomeViewModel
-import com.sample.myplayer.ui.viewmodels.PlayDetailViewModel
 import com.sample.myplayer.ui.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -36,10 +36,13 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val serviceIntent = Intent(this, MusicService::class.java)
+        if (!isServiceRunning(MusicService::class.java)) {
+            startService(serviceIntent)
+        }
+
         setContent {
-
             val systemUiController = rememberSystemUiController()
-
             val useDarkIcons = !isSystemInDarkTheme()
 
             SideEffect {
@@ -65,25 +68,16 @@ class MainActivity : ComponentActivity() {
 
                         Box(modifier = Modifier.fillMaxSize()) {
                             HomeScreen(
-                                navController = navController,
-                                sharedViewModel = sharedViewModel,
                                 onEvent = mainViewModel::onEvent,
                                 uiState = mainViewModel.homeUiState,
                                 music = musicControllerUiState.currentMusic,
+                                sharedViewModel = sharedViewModel,
                                 playerState = musicControllerUiState.playerState,
 
                             )
                         }
                     }
 
-                    composable(route = Screens.PLAY_DETAIL_SCREEN) {
-                        val playDetailViewModel :PlayDetailViewModel = hiltViewModel()
-                        PlayDetailScreen(
-                            onEvent = playDetailViewModel::onEvent,
-                            musicControllerUiState = musicControllerUiState,
-                            onNavigateUp = { navController.navigateUp() }
-                        )
-                    }
                 }
 
             }
@@ -93,8 +87,18 @@ class MainActivity : ComponentActivity() {
     override fun onDestroy() {
         super.onDestroy()
 
-        sharedViewModel.destroyMediaController()
-        stopService(Intent(this, MusicService::class.java))
+//        sharedViewModel.destroyMediaController()
+//        stopService(Intent(this, MusicService::class.java))
+    }
+
+    private fun isServiceRunning(serviceClass: Class<*>): Boolean {
+        val manager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        for (service in manager.getRunningServices(Int.MAX_VALUE)) {
+            if (serviceClass.name == service.service.className) {
+                return true
+            }
+        }
+        return false
     }
 }
 

@@ -37,7 +37,7 @@ sealed class HomeEvent {
     data object SkipToPreviousMusic : HomeEvent()
     data class OnMusicSelected(val selectedMusic: Music) : HomeEvent()
     data object CloseAlert : HomeEvent()
-    data object FetchAssetData : HomeEvent()
+    data object FetchLocalData : HomeEvent()
 }
 
 @HiltViewModel
@@ -54,7 +54,7 @@ class HomeViewModel @Inject constructor(
             HomeEvent.PauseMusic -> pauseMusic()
             HomeEvent.ResumeMusic -> resumeMusic()
             HomeEvent.FetchMusic -> fetchMusicList()
-            HomeEvent.FetchAssetData -> fetchMusicList(isAssetDataRead = true)
+            HomeEvent.FetchLocalData -> fetchMusicList(isLocalDataRead = true)
             is HomeEvent.OnMusicSelected -> homeUiState =
                 homeUiState.copy(selectedMusic = event.selectedMusic)
             is HomeEvent.SkipToNextMusic -> skipToNextMusic()
@@ -63,14 +63,14 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun fetchMusicList(isAssetDataRead: Boolean = false) {
+    private fun fetchMusicList(isLocalDataRead: Boolean = false) {
         homeUiState = homeUiState.copy(loading = true)
 
         viewModelScope.launch {
-            if (Constants.ONLINE && !isAssetDataRead) {
+            if (Constants.ONLINE && !isLocalDataRead) {
                 musicRepository.getMusicList()
             } else {
-                musicRepository.getMusicListFromAsset()
+                musicRepository.getMusicListLocal()
             }.catch {
                 homeUiState = homeUiState.copy(
                     loading = false,
