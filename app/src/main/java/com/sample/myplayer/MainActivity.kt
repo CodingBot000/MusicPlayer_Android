@@ -20,6 +20,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.sample.myplayer.data.service.MusicService
+import com.sample.myplayer.ui.HolderScreen
 import com.sample.myplayer.ui.Screens
 import com.sample.myplayer.ui.SplashScreen
 import com.sample.myplayer.ui.home.HomeScreen
@@ -30,7 +31,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val sharedViewModel: SharedViewModel by viewModels()
+//    private val sharedViewModel: SharedViewModel by viewModels()
 
     @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,33 +54,15 @@ class MainActivity : ComponentActivity() {
             }
             MusicPlayerTheme {
                 val navController = rememberNavController()
+                val sharedViewModel: SharedViewModel = hiltViewModel()
                 val musicControllerUiState = sharedViewModel.musicControllerUiState
 
-                NavHost(navController = navController, startDestination = Screens.SPLASH_SCREEN) {
-                    composable(route = Screens.SPLASH_SCREEN) {
-                        SplashScreen {
-                            navController.navigate(Screens.MAIN_SCREEN) {
-                                popUpTo(Screens.SPLASH_SCREEN) { inclusive = true }
-                            }
-                        }
-                    }
-                    composable(route = Screens.MAIN_SCREEN) {
-                        val mainViewModel: HomeViewModel = hiltViewModel()
-
-                        Box(modifier = Modifier.fillMaxSize()) {
-                            HomeScreen(
-                                onEvent = mainViewModel::onEvent,
-                                uiState = mainViewModel.homeUiState,
-                                musicControllerUiState = musicControllerUiState,
-                                onBackPressed = {
-                                    finish()
-                                }
-                            )
-                        }
-                    }
-
-                }
-
+                HolderScreen(
+                    navController = navController,
+                    musicControllerUiState = musicControllerUiState,
+                    onBackPressed = { finish() },
+                    modifier = Modifier.fillMaxSize()
+                )
             }
         }
     }
