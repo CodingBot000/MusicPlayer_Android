@@ -29,4 +29,8 @@
  <li> Controls the playback state with actions
 <ul>
 
+ ## Project Structure
+![Alt text](https://github.com/CodingBot000/MusicPlayer_Android/blob/main/MusicPlayerSample.drawio.png)
+
+
 
