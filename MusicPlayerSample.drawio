@@ -1,9 +1,15 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36" version="24.7.17">
   <diagram name="Page-1" id="4DrKPTJpOXFCorieyX53">
-    <mxGraphModel dx="2069" dy="1600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="621" dy="480" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="ZRtEfUY7ulT58eTNkE2l-4" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="150" y="30" width="170" height="440" as="geometry" />
+        </mxCell>
+        <mxCell id="ZRtEfUY7ulT58eTNkE2l-48" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="160" y="70" width="150" height="380" as="geometry" />
+        </mxCell>
         <mxCell id="ZRtEfUY7ulT58eTNkE2l-46" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="730" y="25" width="240" height="440" as="geometry" />
         </mxCell>
@@ -15,9 +21,6 @@
         </mxCell>
         <mxCell id="ZRtEfUY7ulT58eTNkE2l-1" value="App: Application" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="20" y="20" width="120" height="30" as="geometry" />
-        </mxCell>
-        <mxCell id="ZRtEfUY7ulT58eTNkE2l-4" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="150" y="30" width="170" height="440" as="geometry" />
         </mxCell>
         <mxCell id="ZRtEfUY7ulT58eTNkE2l-2" value="MainActivity" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="160" y="20" width="120" height="30" as="geometry" />
@@ -153,6 +156,9 @@
             <mxPoint x="434.62" y="505" as="sourcePoint" />
             <mxPoint x="434.62" y="465" as="targetPoint" />
           </mxGeometry>
+        </mxCell>
+        <mxCell id="ZRtEfUY7ulT58eTNkE2l-49" value="HolderScreen" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="175" y="60" width="120" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
