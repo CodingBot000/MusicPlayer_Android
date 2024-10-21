@@ -3,7 +3,6 @@ package com.sample.myplayer.ui.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,21 +14,23 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.SkipNext
+import androidx.compose.material.icons.rounded.SkipPrevious
 import androidx.compose.material.ripple
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Slider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -53,33 +54,9 @@ fun BottomPlayInfoBar(
     onBarClick: () -> Unit
 ) {
 
-    var offsetX by remember { mutableFloatStateOf(0f) }
-
-//        if (music != null) {
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .pointerInput(Unit) {
-                detectDragGestures(
-                    onDragEnd = {
-                        when {
-                            offsetX > 0 -> {
-                                onEvent(HomeEvent.SkipToPreviousMusic)
-                            }
-
-                            offsetX < 0 -> {
-                                onEvent(HomeEvent.SkipToNextMusic)
-                            }
-                        }
-                    },
-                    onDrag = { change, dragAmount ->
-                        change.consume()
-                        val (x, _) = dragAmount
-                        offsetX = x
-                    }
-                )
-
-            }
     ) {
         BottomPlayInfoItem(
             music = music,
@@ -96,7 +73,7 @@ fun BottomPlayInfoBar(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomPlayInfoItem(
+private fun BottomPlayInfoItem(
     music: Music?,
     onEvent: (HomeEvent) -> Unit,
     playerState: PlayerState?,
@@ -104,13 +81,10 @@ fun BottomPlayInfoItem(
     totalTime: Long,
     onBarClick: () -> Unit
 ) {
-
-
     Column(
         modifier = Modifier
             .height(78.dp)
             .clickable(onClick = { onBarClick() })
-
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -155,6 +129,16 @@ fun BottomPlayInfoItem(
                 )
             }
 
+            Icon(
+                imageVector = Icons.Rounded.SkipPrevious,
+                contentDescription = "Skip Previous",
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .padding(12.dp)
+                    .size(32.dp)
+                    .clickable(onClick = { onEvent(HomeEvent.SkipToPreviousMusic) })
+            )
+
             Image(
                 painter = painterResource(
                     id = if (playerState == PlayerState.PLAYING) {
@@ -166,7 +150,6 @@ fun BottomPlayInfoItem(
                 contentDescription = "Music Control",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .padding(end = 16.dp)
                     .size(36.dp)
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
@@ -184,6 +167,18 @@ fun BottomPlayInfoItem(
                 colorFilter = ColorFilter.tint(
                     if (playerState == PlayerState.PLAYING) Orange_20 else Gray_40
                 )
+            )
+
+            Icon(
+                imageVector = Icons.Rounded.SkipNext,
+                contentDescription = "Skip Next",
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .padding(12.dp)
+                    .size(32.dp)
+                    .clickable(onClick = {
+                        onEvent(HomeEvent.SkipToNextMusic)
+                    })
             )
         }
 
