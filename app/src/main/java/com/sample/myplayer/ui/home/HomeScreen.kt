@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -41,7 +42,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.pager.rememberPagerState
 import com.sample.myplayer.ui.component.BottomPlayInfoBar
 import com.sample.myplayer.ui.component.CustomAlertDialog
@@ -50,10 +50,11 @@ import com.sample.myplayer.ui.component.SliderBanner
 import com.sample.myplayer.ui.playdetail.PlayDetailScreen
 import com.sample.myplayer.ui.theme.Gray_10
 import com.sample.myplayer.ui.theme.Gray_20
+import com.sample.myplayer.ui.theme.Gray_30
+import com.sample.myplayer.ui.theme.Gray_50
 import com.sample.myplayer.ui.viewmodels.HomeEvent
 import com.sample.myplayer.ui.viewmodels.HomeUiState
 import com.sample.myplayer.ui.viewmodels.MusicControllerUiState
-import com.sample.myplayer.ui.viewmodels.PlayDetailViewModel
 import kotlinx.coroutines.launch
 
 
@@ -111,14 +112,11 @@ fun HomeScreen(
         content = { innerPadding ->
 
             val pagerState = rememberPagerState()
-            val interactions = pagerState.interactionSource.interactions
-
-            val bgColor = if (isSystemInDarkTheme()) Gray_20 else Gray_10
-
             Scaffold(
                 topBar = { },
                 content = { padding ->
                     HomeContent(
+                        modifier = Modifier.padding(padding),
                         onEvent = onEvent,
                         uiState = uiState,
                         onClickBanner = {
@@ -130,10 +128,13 @@ fun HomeScreen(
                 },
                 bottomBar = {
                     BottomAppBar(
-                        backgroundColor = bgColor,
+                        backgroundColor = if (isSystemInDarkTheme()) Gray_30 else Gray_50,
                         elevation = 25.dp,
                         modifier = Modifier
-                            .clip(RoundedCornerShape(15))
+                            .clip(RoundedCornerShape(
+                                topStart = 15.dp,
+                                topEnd = 15.dp))
+                            .height(80.dp)
                     ) {
                         BottomPlayInfoBar(
                             modifier = Modifier,
@@ -164,11 +165,14 @@ fun HomeScreen(
 
 @Composable
 private fun HomeContent(
+    modifier: Modifier = Modifier,
     onEvent: (HomeEvent) -> Unit,
     uiState: HomeUiState,
     onClickBanner: () -> Unit
 ) {
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = modifier
+        .fillMaxSize())
+    {
         val appBarColor = MaterialTheme.colors.surface.copy(alpha = 0.87f)
         Spacer(
             Modifier

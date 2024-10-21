@@ -1,12 +1,10 @@
 package com.sample.myplayer.ui.component
 
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.background
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,22 +16,17 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ProgressIndicatorDefaults
-import androidx.compose.material3.Slider
-import androidx.compose.material.SliderDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.ripple
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Slider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
@@ -62,53 +55,42 @@ fun BottomPlayInfoBar(
 
     var offsetX by remember { mutableFloatStateOf(0f) }
 
-    AnimatedVisibility(
-        visible = playerState != PlayerState.INIT,
-        modifier = modifier
-    ) {
 //        if (music != null) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .pointerInput(Unit) {
-                        detectDragGestures(
-                            onDragEnd = {
-                                when {
-                                    offsetX > 0 -> {
-                                        onEvent(HomeEvent.SkipToPreviousMusic)
-                                    }
-
-                                    offsetX < 0 -> {
-                                        onEvent(HomeEvent.SkipToNextMusic)
-                                    }
-                                }
-                            },
-                            onDrag = { change, dragAmount ->
-                                change.consume()
-                                val (x, _) = dragAmount
-                                offsetX = x
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .pointerInput(Unit) {
+                detectDragGestures(
+                    onDragEnd = {
+                        when {
+                            offsetX > 0 -> {
+                                onEvent(HomeEvent.SkipToPreviousMusic)
                             }
-                        )
 
+                            offsetX < 0 -> {
+                                onEvent(HomeEvent.SkipToNextMusic)
+                            }
+                        }
+                    },
+                    onDrag = { change, dragAmount ->
+                        change.consume()
+                        val (x, _) = dragAmount
+                        offsetX = x
                     }
-                    .background(
-                        if (!isSystemInDarkTheme()) {
-                            Color.LightGray
-                        } else Color.DarkGray
-                    ),
-            ) {
-                BottomPlayInfoItem(
-                    music = music,
-                    onEvent = onEvent,
-                    playerState = playerState,
-                    currentTime = currentTime,
-                    totalTime = totalTime,
-                    onBarClick = onBarClick,
-
                 )
+
             }
-        }
-//    }
+    ) {
+        BottomPlayInfoItem(
+            music = music,
+            onEvent = onEvent,
+            playerState = playerState,
+            currentTime = currentTime,
+            totalTime = totalTime,
+            onBarClick = onBarClick,
+
+        )
+    }
 }
 
 
@@ -120,7 +102,6 @@ fun BottomPlayInfoItem(
     playerState: PlayerState?,
     currentTime: Long,
     totalTime: Long,
-
     onBarClick: () -> Unit
 ) {
 
@@ -174,17 +155,19 @@ fun BottomPlayInfoItem(
                 )
             }
 
-            AsyncImage(
-                model = if (playerState == PlayerState.PLAYING) {
-                    R.drawable.ic_round_pause
-                } else {
-                    R.drawable.ic_round_play_arrow
-                },
+            Image(
+                painter = painterResource(
+                    id = if (playerState == PlayerState.PLAYING) {
+                        R.drawable.ic_bottom_pause_circle
+                    } else {
+                        R.drawable.ic_bottom_play_arrow
+                    }
+                ),
                 contentDescription = "Music Control",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .padding(end = 16.dp)
-                    .size(48.dp)
+                    .size(36.dp)
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = ripple(
@@ -198,10 +181,10 @@ fun BottomPlayInfoItem(
                             onEvent(HomeEvent.ResumeMusic)
                         }
                     },
-
-                colorFilter = ColorFilter.tint(if (playerState == PlayerState.PLAYING) Orange_20 else Gray_40)
+                colorFilter = ColorFilter.tint(
+                    if (playerState == PlayerState.PLAYING) Orange_20 else Gray_40
+                )
             )
-
         }
 
         Slider(

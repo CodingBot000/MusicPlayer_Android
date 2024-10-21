@@ -113,7 +113,7 @@ fun PlayDetailScreen(
 }
 
 @Composable
-fun PlayDetailScreenContent(
+private fun PlayDetailScreenContent(
     music: Music,
     dominantColor: Color,
     currentTime: Long,
