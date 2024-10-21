@@ -4,7 +4,6 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,7 +18,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FractionalThreshold
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.LocalContentColor
@@ -35,10 +33,7 @@ import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.Replay10
 import androidx.compose.material.icons.rounded.SkipNext
 import androidx.compose.material.icons.rounded.SkipPrevious
-import androidx.compose.material.rememberSwipeableState
-import androidx.compose.material.swipeable
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,12 +44,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.sample.myplayer.R
@@ -62,13 +56,14 @@ import com.sample.myplayer.domain.model.Music
 import com.sample.myplayer.state.PlayerState
 import com.sample.myplayer.ui.component.EmptyView
 import com.sample.myplayer.ui.viewmodels.MusicControllerUiState
+import com.sample.myplayer.ui.viewmodels.PlayDetailViewModel
 import com.sample.myplayer.ui.viewmodels.PlayMusicEvent
 import com.sample.myplayer.util.convertRunningTime
 
 @ExperimentalMaterialApi
 @Composable
 fun PlayDetailScreen(
-    onEvent: (PlayMusicEvent) -> Unit,
+    playDetailViewModel: PlayDetailViewModel = hiltViewModel(),
     musicControllerUiState: MusicControllerUiState,
     onClose: () -> Unit,
 ) {
@@ -78,7 +73,6 @@ fun PlayDetailScreen(
     }
 
     val backgroundColor = MaterialTheme.colors.background
-
     val dominantColor by remember { mutableStateOf(Color.Transparent) }
 
     val iconResId =
@@ -97,19 +91,19 @@ fun PlayDetailScreen(
             totalTime = musicControllerUiState.totalDuration,
             playPauseIcon = iconResId,
             playOrToggleSong = {
-                onEvent(if (musicControllerUiState.playerState == PlayerState.PLAYING) PlayMusicEvent.PausePlayMusic else PlayMusicEvent.ResumePlayMusic)
+                playDetailViewModel.onEvent(if (musicControllerUiState.playerState == PlayerState.PLAYING) PlayMusicEvent.PausePlayMusic else PlayMusicEvent.ResumePlayMusic)
             },
-            playNextSong = { onEvent(PlayMusicEvent.SkipToNextPlayMusic) },
-            playPreviousSong = { onEvent(PlayMusicEvent.SkipToPreviousPlayMusic) },
+            playNextSong = { playDetailViewModel.onEvent(PlayMusicEvent.SkipToNextPlayMusic) },
+            playPreviousSong = { playDetailViewModel.onEvent(PlayMusicEvent.SkipToPreviousPlayMusic) },
             onSliderChange = { newPosition ->
-                onEvent(PlayMusicEvent.SeekPlayMusicToPosition(newPosition.toLong()))
+                playDetailViewModel.onEvent(PlayMusicEvent.SeekPlayMusicToPosition(newPosition.toLong()))
             },
             onForward = {
-                onEvent(PlayMusicEvent.SeekPlayMusicToPosition(musicControllerUiState.currentPosition + 10 * 1000))
+                playDetailViewModel.onEvent(PlayMusicEvent.SeekPlayMusicToPosition(musicControllerUiState.currentPosition + 10 * 1000))
             },
             onRewind = {
                 musicControllerUiState.currentPosition.let { currentPosition ->
-                    onEvent(PlayMusicEvent.SeekPlayMusicToPosition(if (currentPosition - 10 * 1000 < 0) 0 else currentPosition - 10 * 1000))
+                    playDetailViewModel.onEvent(PlayMusicEvent.SeekPlayMusicToPosition(if (currentPosition - 10 * 1000 < 0) 0 else currentPosition - 10 * 1000))
                 }
             },
             onClose = { onClose() }

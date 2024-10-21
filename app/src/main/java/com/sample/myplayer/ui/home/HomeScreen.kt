@@ -64,7 +64,6 @@ fun HomeScreen(
     onEvent: (HomeEvent) -> Unit,
     uiState: HomeUiState,
     musicControllerUiState: MusicControllerUiState,
-    playDetailViewModel: PlayDetailViewModel = hiltViewModel(),
     onBackPressed: () -> Unit
 
 ) {
@@ -97,7 +96,6 @@ fun HomeScreen(
         sheetContent = {
 
             PlayDetailScreen(
-                onEvent = playDetailViewModel::onEvent,
                 musicControllerUiState = musicControllerUiState,
                 onClose = {
                     scope.launch {
