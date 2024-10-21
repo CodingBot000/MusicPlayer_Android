@@ -4,7 +4,7 @@
  This ToyProject make modern Android development with Compose, Dagger-Hilt, Coroutines, Jetpack based on MVVM architecture.
 </br>
 
-[![Video Label](http://img.youtube.com/vi/xrDFs1vxrzU/0.jpg)](https://youtu.be/xrDFs1vxrzU)
+[![Video Label](http://img.youtube.com/vi/36fbyUBBeXE/0.jpg)](https://youtu.be/36fbyUBBeXE)
 - Click to view as a 'YouTube' video.
 
 ## Tech stack
