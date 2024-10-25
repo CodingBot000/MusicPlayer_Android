@@ -42,7 +42,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.pager.rememberPagerState
+import com.sample.myplayer.ui.LocalSharedViewModel
 import com.sample.myplayer.ui.component.BottomPlayInfoBar
 import com.sample.myplayer.ui.component.CustomAlertDialog
 import com.sample.myplayer.ui.component.MusicItem
@@ -55,6 +57,7 @@ import com.sample.myplayer.ui.theme.Gray_50
 import com.sample.myplayer.ui.viewmodels.HomeEvent
 import com.sample.myplayer.ui.viewmodels.HomeUiState
 import com.sample.myplayer.ui.viewmodels.MusicControllerUiState
+import com.sample.myplayer.ui.viewmodels.SharedViewModel
 import kotlinx.coroutines.launch
 
 
@@ -64,10 +67,15 @@ import kotlinx.coroutines.launch
 fun HomeScreen(
     onEvent: (HomeEvent) -> Unit,
     uiState: HomeUiState,
-    musicControllerUiState: MusicControllerUiState,
+
     onBackPressed: () -> Unit
 
 ) {
+//    val sharedViewModel: SharedViewModel = hiltViewModel()
+    val sharedViewModel = LocalSharedViewModel.current
+    val musicControllerUiState = sharedViewModel.musicControllerUiState
+
+
     val isInitialized = rememberSaveable { mutableStateOf(false) }
 
     if (!isInitialized.value) {

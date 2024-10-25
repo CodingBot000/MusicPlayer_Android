@@ -23,6 +23,7 @@ data class MusicControllerUiState(
     val isRepeatOneEnabled: Boolean = false
 )
 
+
 @HiltViewModel
 class SharedViewModel @Inject constructor(
     private val musicController: MusicController,
@@ -36,8 +37,10 @@ class SharedViewModel @Inject constructor(
     }
 
     private fun setMediaControllerCallback() {
+
         musicController.mediaControllerCallback =  { playerState, currentMusic, currentPosition, totalDuration,
                                             isShuffleEnabled, isRepeatOneEnabled ->
+
             musicControllerUiState = musicControllerUiState.copy(
                 playerState = playerState,
                 currentMusic = currentMusic,
