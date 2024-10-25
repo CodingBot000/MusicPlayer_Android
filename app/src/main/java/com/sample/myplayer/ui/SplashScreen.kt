@@ -17,16 +17,18 @@ import androidx.compose.ui.unit.sp
 import com.sample.myplayer.R
 import com.sample.myplayer.ui.component.RainBowTextColorAnimation
 import com.sample.myplayer.ui.theme.rainbowColors
+import com.sample.myplayer.ui.viewmodels.SharedViewModel
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen(outSplash: () -> Unit) {
+fun SplashScreen(
+    outSplash: () -> Unit
+) {
 
     LaunchedEffect(key1 = true) {
-        delay(3000)
+        delay(2000)
         outSplash()
     }
-
 
     Column(
         modifier = Modifier
@@ -46,7 +48,5 @@ fun SplashScreen(outSplash: () -> Unit) {
             fontSize = 44.sp,
             rainbowColors = rainbowColors
         )
-
     }
-
 }

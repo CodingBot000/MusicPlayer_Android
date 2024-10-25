@@ -4,11 +4,11 @@ package com.sample.myplayer.domain.model
 import com.google.gson.annotations.SerializedName
 
 data class Music(
-    val id: String,
-    val title: String,
-    val desc: String,
-    val musicUrl: String,
-    val albumThumbUrl: String,
+    val id: String = "",
+    val title: String = "",
+    val desc: String = "",
+    val musicUrl: String = "",
+    val albumThumbUrl: String = ""
 ) {
     override fun toString(): String {
         return "Music(" +
@@ -20,6 +20,7 @@ data class Music(
             ")"
     }
 }
+
 
 data class MusicJsonDatas(
     @SerializedName("musics") val datas: List<Music>

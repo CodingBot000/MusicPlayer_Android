@@ -31,7 +31,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-//    private val sharedViewModel: SharedViewModel by viewModels()
 
     @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,12 +53,9 @@ class MainActivity : ComponentActivity() {
             }
             MusicPlayerTheme {
                 val navController = rememberNavController()
-                val sharedViewModel: SharedViewModel = hiltViewModel()
-                val musicControllerUiState = sharedViewModel.musicControllerUiState
 
                 HolderScreen(
                     navController = navController,
-                    musicControllerUiState = musicControllerUiState,
                     onBackPressed = { finish() },
                     modifier = Modifier.fillMaxSize()
                 )
